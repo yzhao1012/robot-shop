@@ -58,7 +58,7 @@ server {
     #}
 
     location /api/catalogue/ {
-        proxy_pass http://${CATALOGUE_HOST}:8080/;
+        proxy_pass https://${CATALOGUE_HOST}:8443/;
     }
 
     location /api/user/ {

@@ -25,6 +25,10 @@ const counter = new promClient.Counter({
     registers: [register]
 });
 
+// This instructs node to allow making requests to a TLS server without client side TLS.
+// Therefore the call to catalogue service is allowed.
+// See https://github.com/request/request/issues/418
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 var redisConnected = false;
 
@@ -361,7 +365,7 @@ function calcTax(total) {
 
 function getProduct(sku) {
     return new Promise((resolve, reject) => {
-        request('http://' + catalogueHost + ':8080/product/' + sku, (err, res, body) => {
+        request('https://' + catalogueHost + ':8443/product/' + sku, (err, res, body) => {
             if(err) {
                 reject(err);
             } else if(res.statusCode != 200) {

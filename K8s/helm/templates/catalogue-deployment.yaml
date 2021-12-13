@@ -27,7 +27,7 @@ spec:
               fieldRef:
                 fieldPath: status.hostIP
         ports:
-        - containerPort: 8080
+        - containerPort: 8443
         resources:
           limits:
             cpu: 200m
