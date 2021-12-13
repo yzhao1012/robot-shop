@@ -7,6 +7,8 @@ instana({
     }
 });
 
+const fs = require('fs');
+const https = require('https');
 const redis = require('redis');
 const request = require('request');
 const bodyParser = require('body-parser');
@@ -399,9 +401,12 @@ redisClient.on('ready', (r) => {
     redisConnected = true;
 });
 
-// fire it up!
-const port = process.env.CART_SERVER_PORT || '8080';
-app.listen(port, () => {
-    logger.info('Started on port', port);
-});
+var privateKey  = fs.readFileSync('/tmp/ssl_keys/server.key', 'utf8');
+var certificate = fs.readFileSync('/tmp/ssl_keys/server.crt', 'utf8');
+var httpsServer = https.createServer({key: privateKey, cert: certificate}, app);
 
+// fire it up!
+const httpsPort = process.env.CART_SERVER_PORT || '8443';
+httpsServer.listen(httpsPort, function () {
+    logger.info('Started on port', httpsPort);
+});

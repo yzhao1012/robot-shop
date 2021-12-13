@@ -180,9 +180,12 @@ function mongoLoop() {
 
 mongoLoop();
 
-// fire it up!
-const port = process.env.CATALOGUE_SERVER_PORT || '8080';
-app.listen(port, () => {
-    logger.info('Started on port', port);
-});
+var privateKey  = fs.readFileSync('/tmp/ssl_keys/server.key', 'utf8');
+var certificate = fs.readFileSync('/tmp/ssl_keys/server.crt', 'utf8');
+var httpsServer = https.createServer({key: privateKey, cert: certificate}, app);
 
+// fire it up!
+const httpsPort = process.env.CATALOGUE_SERVER_PORT || '8443';
+httpsServer.listen(httpsPort, function () {
+    logger.info('Started on port', httpsPort);
+});
